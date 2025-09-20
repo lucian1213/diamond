@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>밀실과 사라진 다이아와 아가씨</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+        
+        .title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffd700, #ffed4e, #fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 8px;
+            animation: glow 2s ease-in-out infinite alternate;
+            line-height: 1.2;
+        }
+        
+        @keyframes glow {
+            from { filter: drop-shadow(0 0 5px #ffd700); }
+            to { filter: drop-shadow(0 0 10px #ffd700); }
+        }
+        
+        .subtitle {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: 15px;
+        }
+        
+        .game-info {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 2px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .section-title {
+            font-size: 1.2rem;
+            color: #ffd700;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #ffd700;
+            padding-bottom: 5px;
+        }
+        
+        .story-box {
+            background: rgba(220, 20, 60, 0.2);
+            border-left: 4px solid #dc143c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+        }
+        
+        .rules-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .rules-list li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+            font-size: 0.9rem;
+        }
+        
+        .rules-list li::before {
+            content: "💎";
+            position: absolute;
+            left: 0;
+        }
+        
+        .flow-list {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .flow-list li {
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid #ffd700;
+        }
+        
+        .flow-sub {
+            margin-left: 15px;
+            margin-top: 5px;
+            font-size: 0.85rem;
+            color: #ccc;
+        }
+        
+        .character-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .character-btn {
+            background: linear-gradient(45deg, #2c1810, #8b4513);
+            border: 2px solid #ffd700;
+            border-radius: 12px;
+            padding: 15px 10px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            min-height: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .character-btn::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 215, 0, 0.1), transparent);
+            transform: rotate(45deg);
+            transition: all 0.6s;
+            opacity: 0;
+        }
+        
+        .character-btn:hover::before {
+            animation: shine 0.6s ease-in-out;
+        }
+        
+        .character-btn:active {
+            transform: scale(0.95);
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+            50% { opacity: 1; }
+            100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+        }
+        
+        .character-name {
+            font-size: 1rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: #ffd700;
+        }
+        
+        .character-quote {
+            font-style: italic;
+            opacity: 0.9;
+            font-size: 0.75rem;
+            line-height: 1.3;
+        }
+        
+        .content-section {
+            display: none;
+        }
+        
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .dialogue-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+            margin: 8px 0;
+            border-left: 4px solid #ffd700;
+        }
+        
+        .dialogue-number {
+            color: #ffd700;
+            font-weight: bold;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+        
+        .dialogue-text {
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+        
+        .back-btn, .ending-btn {
+            background: linear-gradient(45deg, #dc143c, #b22222);
+            border: none;
+            border-radius: 20px;
+            padding: 10px 20px;
+            color: #fff;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            margin: 8px 5px;
+            transition: all 0.3s ease;
+            min-width: 100px;
+        }
+        
+        .back-btn:active, .ending-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .decorative-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+        
+        .diamond {
+            position: absolute;
+            color: #ffd700;
+            font-size: 16px;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(180deg); }
+        }
+        
+        .youtube-container {
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .youtube-link {
+            color: #ffd700;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        
+        .youtube-link:hover {
+            text-decoration: underline;
+        }
+        
+        .ending-dialogue {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 8px 12px;
+            margin: 5px 0;
+            border-radius: 8px;
+            border-left: 3px solid #ffd700;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        
+        .speaker-name {
+            color: #ffd700;
+            font-weight: bold;
+        }
+        
+        .ending-section-break {
+            margin: 20px 0;
+            text-align: center;
+            border-top: 2px solid rgba(255, 215, 0, 0.3);
+            padding-top: 20px;
+        }
+        
+        .truth-reveal {
+            background: rgba(220, 20, 60, 0.2);
+            border-radius: 10px;
+            padding: 15px;
+            margin: 20px 0;
+            text-align: center;
+            border: 2px solid rgba(220, 20, 60, 0.5);
+        }
+        
+        .truth-title {
+            color: #ffd700;
+            font-size: 1.1rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .copyright {
+            text-align: center;
+            margin: 20px 0;
+            font-style: italic;
+            color: #ffd700;
+            font-size: 0.8rem;
+        }
+        
+        .note-text {
+            font-style: italic;
+            opacity: 0.8;
+            font-size: 0.8rem;
+            margin-top: 15px;
+        }
+        
+        .button-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="decorative-elements">
+        <div class="diamond" style="top: 5%; left: 10%; animation-delay: 0s;">💎</div>
+        <div class="diamond" style="top: 15%; right: 5%; animation-delay: 1s;">💎</div>
+        <div class="diamond" style="top: 50%; left: 5%; animation-delay: 2s;">💎</div>
+        <div class="diamond" style="bottom: 30%; right: 10%; animation-delay: 3s;">💎</div>
+        <div class="diamond" style="bottom: 10%; left: 15%; animation-delay: 4s;">💎</div>
+    </div>
+
+    <div class="container">
+        <div class="header">
+            <h1 class="title">밀실과 사라진 다이아와 아가씨</h1>
+            <p class="subtitle">플레이어 4명 + GM 1명 / 플레이시간 약 30분</p>
+        </div>
+
+        <div id="main-content">
+            <div class="game-info">
+                <h2 class="section-title">게임 방법</h2>
+                <p>◎본 작품은 바이어 타카하시 채널 공식 콜라보 기획 「대사뒤섞기드라마」 콘테스트 응모작품입니다. 머더미스터리 게임이 아니니 주의해주세요.</p>
+                <div class="youtube-container">
+                    <p>◎게임 진행을 이해하기 위해 플레이 전에 「눈치 없으면 끝나지 않는 형사드라마」 영상 시청을 권장합니다.</p>
+                    <a href="https://www.youtube.com/embed/fqoWOnccReo" target="_blank" class="youtube-link">영상 보러가기</a>
+                </div>
+            </div>
+
+            <div class="game-info">
+                <h2 class="section-title">스토리</h2>
+                <div class="story-box">
+                    지저스! 이런, 저택 금고에서 다이아가 사라졌어! 빨리 찾지 않으면 우리 모두 해고당할 거야! ――베테랑 경비원 마이클(※본편에는 등장하지 않음)
+                </div>
+            </div>
+
+
+
+            <div class="game-info">
+                <h2 class="section-title">게임 규칙</h2>
+                <ul class="rules-list">
+                    <li>각 플레이어는 자신의 대사 4개가 적힌 「대사카드」를 받습니다.</li>
+                    <li>총 16개 대사를 정확한 순서로 말해야 게임이 끝납니다.</li>
+                    <li>올바른 대사 순서는 플레이어 4명 모두 모르는 상태입니다.</li>
+                    <li>같은 사람의 대사가 연속으로 나오는 경우는 없습니다.</li>
+                    <li>잘못된 타이밍에 대사를 말하면 실패입니다.</li>
+                    <li>2명 이상이 동시에 대사를 말해도 실패입니다.</li>
+                    <li>실패하면 처음 대사부터 다시 시작하세요.</li>
+                    <li>대사 단계에서는 배정받은 대사 외의 말을 하면 안 됩니다.</li>
+                    <li>판정 단계에서는 대화할 수 있지만 「다음 대사는 누가 할까?」 같은 힌트성 대화는 금지입니다.</li>
+                </ul>
+            </div>
+
+                      <div class="game-info">
+                <h2 class="section-title">게임 진행</h2>
+                <ul class="flow-list">
+                    <li>● 게임마스터가 플레이어들에게 대사를 나누어 줍니다</li>
+                    <li>● 플레이어들이 자신의 대사를 확인합니다</li>
+                    <li>● 【대사 단계①】플레이어가 「첫 번째라고 생각하는 대사」를 읽습니다</li>
+                    <li>● 【판정 단계】게임마스터가 정답/오답을 판정합니다
+                        <div class="flow-sub">○ 정답일 경우: 【대사 단계②】로 진행</div>
+                        <div class="flow-sub">○ 오답일 경우: 【대사 단계①】을 다시 진행</div>
+                    </li>
+                    <li>● 【대사 단계②】플레이어가 「두 번째라고 생각하는 대사」를 읽습니다
+                        <div class="flow-sub">○ 정답일 경우: 【대사 단계③】로 진행</div>
+                        <div class="flow-sub">○ 오답일 경우: 【대사 단계①】 대사를 다시 읽은 후 【대사 단계②】를 재시도</div>
+                    </li>
+                    <li>● 이후 【대사 단계⑯】까지 반복합니다</li>
+                    <li>● 모든 대사를 완주하면 엔딩을 확인합니다.</li>
+                </ul>
+            </div>
+
+            <div class="game-info">
+                <h2 class="section-title">역할 분배</h2>
+                <p>플레이어는 다음 캐릭터 중에서 각자 담당할 역할을 정하세요.</p>
+                
+                <div class="character-buttons">
+                    <button class="character-btn" onclick="showCharacterSheet('victoria')">
+                        <div class="character-name">빅토리아</div>
+                        <div class="character-quote">두말할 나위 없는 저입니다와!</div>
+                    </button>
+                    
+                    <button class="character-btn" onclick="showCharacterSheet('sebastian')">
+                        <div class="character-name">세바스</div>
+                        <div class="character-quote">역시 대단하십니다 아가씨!</div>
+                    </button>
+                    
+                    <button class="character-btn" onclick="showCharacterSheet('akechi')">
+                        <div class="character-name">아케치</div>
+                        <div class="character-quote">후후. 모든 것을 제가 밝혀내겠습니다!</div>
+                    </button>
+                    
+                    <button class="character-btn" onclick="showCharacterSheet('kobayashi')">
+                        <div class="character-name">코바야시</div>
+                        <div class="character-quote">역시 선생님이에요! 평생 따라가겠어요!</div>
+                    </button>
+                    
+                    <button class="character-btn" onclick="showCharacterSheet('gamemaster')" style="grid-column: span 2; background: linear-gradient(45deg, #4b0082, #8b008b);">
+                        <div class="character-name">게임마스터</div>
+                        <div class="character-quote">정답을 확인하고 게임을 진행하세요!</div>
+                    </button>
+                </div>
+            </div>
+
+
+
+
+        <!-- Character Sheets -->
+        <div id="victoria-sheet" class="content-section">
+            <h2 class="section-title">빅토리아의 대사 시트</h2>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사①</div>
+                <div class="dialogue-text">그렇습니다와! 보세요, 얼음이 녹으면 문이 잠기는 트릭이에요!</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사②</div>
+                <div class="dialogue-text">그리고... 창문에도 자물쇠가 채워져 있어요</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사③</div>
+                <div class="dialogue-text">밀실에서 홀연히 사라진 다이아... 완전범죄네요――!</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사④</div>
+                <div class="dialogue-text">물론 아무에게도 들키지 않게 하고 있어요. 저택의 일류 경비원에게도 말이죠</div>
+            </div>
+            <p class="note-text">※대사①～④와 실제 대사 순서는 무관합니다.</p>
+            <div class="button-container">
+                <button class="back-btn" onclick="showMainContent()">뒤로가기</button>
+                <button class="ending-btn" onclick="showEnding()">엔딩 보기</button>
+            </div>
+        </div>
+
+        <div id="sebastian-sheet" class="content-section">
+            <h2 class="section-title">세바스의 대사 시트</h2>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사①</div>
+                <div class="dialogue-text">난로에 불을 피워두었기 때문에 그쪽은 문제없습니다</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사②</div>
+                <div class="dialogue-text">역시 대단하십니다, 아가씨! 이제...</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사③</div>
+                <div class="dialogue-text">자물쇠로 잠긴 출입구와 열려진 금고...</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사④</div>
+                <div class="dialogue-text">역시 가장 놀라운 것은 금고겠지요. 이 복잡한 자물쇠를 풀 수 있는 건 아가씨뿐입니다</div>
+            </div>
+            <p class="note-text">※대사①～④와 실제 대사 순서는 무관합니다.</p>
+            <div class="button-container">
+                <button class="back-btn" onclick="showMainContent()">뒤로가기</button>
+                <button class="ending-btn" onclick="showEnding()">엔딩 보기</button>
+            </div>
+        </div>
+
+        <div id="akechi-sheet" class="content-section">
+            <h2 class="section-title">아케치의 대사 시트</h2>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사①</div>
+                <div class="dialogue-text">침입 경로군요. 물론 처음에 확인했지만, 지문 하나 남아있지 않았어요</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사②</div>
+                <div class="dialogue-text">모든 것이 해결되었습니다. 미션 컴플리트예요</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사③</div>
+                <div class="dialogue-text">후후, 저에게 맡겨주세요. 자, 다시 한 번 현장을 살펴보죠</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사④</div>
+                <div class="dialogue-text">어라...? 문 아래쪽이 조금 젖어있네요...</div>
+            </div>
+            <p class="note-text">※대사①～④와 실제 대사 순서는 무관합니다.</p>
+            <div class="button-container">
+                <button class="back-btn" onclick="showMainContent()">뒤로가기</button>
+                <button class="ending-btn" onclick="showEnding()">엔딩 보기</button>
+            </div>
+        </div>
+
+        <div id="gamemaster-sheet" class="content-section">
+            <h2 class="section-title">게임마스터용 - 올바른 대사 순서</h2>
+            <p style="margin-bottom: 20px; color: #ffd700; font-weight: 500;">16개 대사를 모두 맞추면 「엔딩 시트」를 배포해주세요.</p>
+            
+            <div class="dialogue-card">
+                <div class="dialogue-number">1번</div>
+                <div class="dialogue-text"><span style="color: #ff69b4; font-weight: bold;">빅토리아:</span> 밀실에서 홀연히 사라진 다이아... 완전범죄네요――!</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">2번</div>
+                <div class="dialogue-text"><span style="color: #98fb98; font-weight: bold;">코바야시:</span> 틀림없어요! 이 방 어디에도 흔적은 남아있지 않아요!</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">3번</div>
+                <div class="dialogue-text"><span style="color: #87ceeb; font-weight: bold;">세바스:</span> 자물쇠로 잠긴 출입구와 열려진 금고...</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">4번</div>
+                <div class="dialogue-text"><span style="color: #dda0dd; font-weight: bold;">아케치:</span> 후후, 저에게 맡겨주세요. 자, 다시 한 번 현장을 살펴보죠</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">5번</div>
+                <div class="dialogue-text"><span style="color: #87ceeb; font-weight: bold;">세바스:</span> 역시 가장 놀라운 것은 금고겠지요. 이 복잡한 자물쇠를 풀 수 있는 건 아가씨뿐입니다</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">6번</div>
+                <div class="dialogue-text"><span style="color: #ff69b4; font-weight: bold;">빅토리아:</span> 물론 아무에게도 들키지 않게 하고 있어요. 저택의 일류 경비원에게도 말이죠</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">7번</div>
+                <div class="dialogue-text"><span style="color: #98fb98; font-weight: bold;">코바야시:</span> 참고로 감시카메라는 모두 가짜 영상으로 교체되어 있었어요</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">8번</div>
+                <div class="dialogue-text"><span style="color: #ff69b4; font-weight: bold;">빅토리아:</span> 그리고... 창문에도 자물쇠가 채워져 있어요</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">9번</div>
+                <div class="dialogue-text"><span style="color: #dda0dd; font-weight: bold;">아케치:</span> 침입 경로군요. 물론 처음에 확인했지만, 지문 하나 남아있지 않았어요</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">10번</div>
+                <div class="dialogue-text"><span style="color: #98fb98; font-weight: bold;">코바야시:</span> 그런데 이 난로에서 연결된 굴뚝은 괜찮을까요?</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">11번</div>
+                <div class="dialogue-text"><span style="color: #87ceeb; font-weight: bold;">세바스:</span> 난로에 불을 피워두었기 때문에 그쪽은 문제없습니다</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">12번</div>
+                <div class="dialogue-text"><span style="color: #dda0dd; font-weight: bold;">아케치:</span> 어라...? 문 아래쪽이 조금 젖어있네요...</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">13번</div>
+                <div class="dialogue-text"><span style="color: #ff69b4; font-weight: bold;">빅토리아:</span> 그렇습니다와! 보세요, 얼음이 녹으면 문이 잠기는 트릭이에요!</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">14번</div>
+                <div class="dialogue-text"><span style="color: #98fb98; font-weight: bold;">코바야시:</span> 평범하게 문으로 나가기만 해도 자동으로 밀실이 완성되는군요!</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">15번</div>
+                <div class="dialogue-text"><span style="color: #87ceeb; font-weight: bold;">세바스:</span> 역시 대단하십니다, 아가씨! 이제...</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">16번</div>
+                <div class="dialogue-text"><span style="color: #dda0dd; font-weight: bold;">아케치:</span> 모든 것이 해결되었습니다. 미션 컴플리트예요</div>
+            </div>
+            
+            <div class="note-text" style="margin-top: 20px; text-align: center; background: rgba(255, 215, 0, 0.2); padding: 15px; border-radius: 8px;">
+                <strong>🎯 게임마스터 가이드</strong><br>
+                플레이어들이 순서대로 대사를 말할 때마다 위 순서와 비교하여 정답/오답을 판정해주세요.<br>
+                틀리면 처음부터 다시 시작합니다.
+            </div>
+            
+            <div class="button-container">
+                <button class="back-btn" onclick="showMainContent()">뒤로가기</button>
+                <button class="ending-btn" onclick="showEnding()">엔딩 보기</button>
+            </div>
+        </div>
+
+        <div id="kobayashi-sheet" class="content-section">
+            <h2 class="section-title">코바야시의 대사 시트</h2>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사①</div>
+                <div class="dialogue-text">틀림없어요! 이 방 어디에도 흔적은 남아있지 않아요!</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사②</div>
+                <div class="dialogue-text">평범하게 문으로 나가기만 해도 자동으로 밀실이 완성되는군요!</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사③</div>
+                <div class="dialogue-text">참고로 감시카메라는 모두 가짜 영상으로 교체되어 있었어요</div>
+            </div>
+            <div class="dialogue-card">
+                <div class="dialogue-number">대사④</div>
+                <div class="dialogue-text">그런데 이 난로에서 연결된 굴뚝은 괜찮을까요?</div>
+            </div>
+            <p class="note-text">※대사①～④와 실제 대사 순서는 무관합니다.</p>
+            <div class="button-container">
+                <button class="back-btn" onclick="showMainContent()">뒤로가기</button>
+                <button class="ending-btn" onclick="showEnding()">엔딩 보기</button>
+            </div>
+        </div>
+
+        <!-- Ending Section -->
+        <div id="ending-section" class="content-section">
+            <h2 class="section-title">엔딩 시트</h2>
+            
+            <div class="ending-dialogue"><span class="speaker-name">게임마스터:</span> 수고하셨습니다! 그럼 마지막으로 한 번 더 정답 대사를 읽어보고 마무리하겠습니다.</div>
+            <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 밀실에서 홀연히 사라진 다이아... 완전범죄네요――!</div>
+            <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 틀림없어요! 이 방 어디에도 흔적은 남아있지 않아요!</div>
+            <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 자물쇠로 잠긴 출입구와 열려진 금고...</div>
+            <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 후후, 저에게 맡겨주세요. 자, 다시 한 번 현장을 살펴보죠</div>
+            <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 역시 가장 놀라운 것은 금고겠지요. 이 복잡한 자물쇠를 풀 수 있는 건 아가씨뿐입니다</div>
+            <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 물론 아무에게도 들키지 않게 하고 있어요. 저택의 일류 경비원에게도 말이죠</div>
+            <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 참고로 감시카메라는 모두 가짜 영상으로 교체되어 있었어요</div>
+            <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 그리고... 창문에도 자물쇠가 채워져 있어요</div>
+            <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 침입 경로군요. 물론 처음에 확인했지만, 지문 하나 남아있지 않았어요</div>
+            <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 그런데 이 난로에서 연결된 굴뚝은 괜찮을까요?</div>
+            <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 난로에 불을 피워두었기 때문에 그쪽은 문제없습니다</div>
+            <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 어라...? 문 아래쪽이 조금 젖어있네요...</div>
+            <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 그렇습니다와! 보세요, 얼음이 녹으면 문이 잠기는 트릭이에요!</div>
+            <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 평범하게 문으로 나가기만 해도 자동으로 밀실이 완성되는군요!</div>
+            <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 역시 대단하십니다, 아가씨! 이제...</div>
+            <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 모든 것이 해결되었습니다. 미션 컴플리트예요</div>
+
+            <div class="ending-section-break">
+                <div class="ending-dialogue"><span class="speaker-name">게임마스터:</span> 자, 수고하셨습니다. 이것으로 이야기는 끝입니다......</div>
+                <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> ――잠깐, 기다려주세요!</div>
+                <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 어? 무슨 일 있어요?</div>
+                <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 큰 소리를 내시니 품격이 떨어집니다</div>
+                <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 「무슨 일 있어요오?」「품격이 떨어집니다아」가 아니에요! 이러면 마치 우리가 탐정들 같잖아요!</div>
+                <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 어라, 후후. 그럼 어떻게 하면 좋겠나? 빅토리아 양</div>
+                <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 당연하죠! 반대 순서로 읽는 거예요!</div>
+                <div class="ending-dialogue"><span class="speaker-name">게임마스터:</span> ――그렇다고 하니 여러분들도 조금 더 함께해주세요.</div>
+            </div>
+
+            <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 모든 것이 해결되었습니다. 미션 컴플리트예요</div>
+            <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 역시 대단하십니다, 아가씨! 이제...</div>
+            <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 평범하게 문으로 나가기만 해도 자동으로 밀실이 완성되는군요!</div>
+            <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 그렇습니다와! 보세요, 얼음이 녹으면 문이 잠기는 트릭이에요!</div>
+            <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 어라...? 문 아래쪽이 조금 젖어있네요...</div>
+            <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 난로에 불을 피워두었기 때문에 그쪽은 문제없습니다</div>
+            <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 그런데 이 난로에서 연결된 굴뚝은 괜찮을까요?</div>
+            <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 침입 경로군요. 물론 처음에 확인했지만, 지문 하나 남아있지 않았어요</div>
+            <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 그리고... 창문에도 자물쇠가 채워져 있어요</div>
+            <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 참고로 감시카메라는 모두 가짜 영상으로 교체되어 있었어요</div>
+            <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 물론 아무에게도 들키지 않게 하고 있어요. 저택의 일류 경비원에게도 말이죠</div>
+            <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 역시 가장 놀라운 것은 금고겠지요. 이 복잡한 자물쇠를 풀 수 있는 건 아가씨뿐입니다</div>
+            <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 후후, 저에게 맡겨주세요. 자, 다시 한 번 현장을 살펴보죠</div>
+            <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 자물쇠로 잠긴 출입구와 열려진 금고...</div>
+            <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 틀림없어요! 이 방 어디에도 흔적은 남아있지 않아요!</div>
+            <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 밀실에서 홀연히 사라진 다이아... 완전범죄네요――!</div>
+
+            <div class="truth-reveal">
+                <div class="truth-title">진실이 밝혀집니다!</div>
+                <div class="ending-dialogue"><span class="speaker-name">게임마스터:</span> 자, 이것이 바로 그들 「아케치 괴도단」의 진짜 모습입니다.</div>
+                <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 아케치 선생의 금고 열기, 초절기교였어요!</div>
+                <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 후후. 이렇게 무사히 다이아도 손에 넣었으니 오락거리로는 재미있었지 않나</div>
+                <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 음, 그렇네요. 아가씨 대접받아서 저는 꽤 기분이 좋았어요! 세바스 씨, 앞으로는 저를 모셔도 괜찮아요?</div>
+                <div class="ending-dialogue"><span class="speaker-name">세바스:</span> 아니요, 제 주인은 오직 아케치 아가씨뿐입니다. 사양하겠습니다</div>
+                <div class="ending-dialogue"><span class="speaker-name">코바야시:</span> 그런데 빅토리아 씨는 왜 그런 말투예요? 혹시 정말로 어디 집 아가씨인 거 아니에요?</div>
+                <div class="ending-dialogue"><span class="speaker-name">빅토리아:</span> 애니메이션으로 일본어를 배우다 보니 이렇게 되었어요! 저는 태어나서 자란 것도 중산층, 노력형 일류 해커라고요!</div>
+                <div class="ending-dialogue"><span class="speaker-name">아케치:</span> 어라, 좀 너무 여유부렸군. 이제 곧 저택 주인이 경찰에 신고했을 시간이다. 최대한 멀리 떠나도록 하자――</div>
+                <div class="ending-dialogue"><span class="speaker-name">게임마스터:</span> 자, 이제 정말로 이야기가 끝났습니다. 다음 페이지부터 해설이 시작됩니다.</div>
+            </div>
+            
+            <div class="game-info" style="margin-top: 30px;">
+                <h2 class="section-title">해설</h2>
+                
+                <div class="dialogue-card">
+                    <div class="dialogue-number">빅토리아</div>
+                    <div class="dialogue-text">밀실에서 홀연히 사라진 다이아... 완전범죄네요――!</div>
+                    <div class="note-text">첫 번째 대사 선정으로는 다소 어렵지만, 빅토리아 대사 중에서는 접속사가 없고 상황 설명으로 대화를 시작하기 쉽다는 점이 포인트입니다.<br>
+                    ※게임 시작 시점에서 「미션 컴플리트」부터 시작해서 오답 판정을 받은 명탐정 아케치인 당신. 죄송합니다! 작가는 「설마 그런 천재가 있겠어」라고 방심하여 일직선 루트를 채택했습니다. 작가의 예상을 뛰어넘는 명탐정(대괴도?) 실력, 훌륭합니다!</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">코바야시</div>
+                    <div class="dialogue-text">틀림없어요! 이 방 어디에도 흔적은 남아있지 않아요!</div>
+                    <div class="note-text">「완전범죄」라는 단어에 동조하는 형태로 끼워 넣을 수 있는 코바야시의 대사가 정답입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">세바스</div>
+                    <div class="dialogue-text">자물쇠로 잠긴 출입구와 열려진 금고...</div>
+                    <div class="note-text">마찬가지로 「밀실」이라는 단어와 연관되는 세바스 대사가 이어집니다. 앞의 코바야시나 뒤의 아케치 대사와의 순서는 난이도가 높습니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">아케치</div>
+                    <div class="dialogue-text">후후, 저에게 맡겨주세요. 자, 다시 한 번 현장을 살펴보죠</div>
+                    <div class="note-text">완전범죄에 당황하는 일동을 도와주는 형태로 아케치 대사가 들어갑니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">세바스</div>
+                    <div class="dialogue-text">역시 가장 놀라운 것은 금고겠지요. 이 복잡한 자물쇠를 풀 수 있는 건 아가씨뿐입니다</div>
+                    <div class="note-text">「현장을 살펴보자」는 아케치의 제안에 대해 「역시~」라며 금고에 주목시키는 세바스 대사입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">빅토리아</div>
+                    <div class="dialogue-text">물론 아무에게도 들키지 않게 하고 있어요. 저택의 일류 경비원에게도 말이죠</div>
+                    <div class="note-text">아가씨=빅토리아라는 전제 하에 「아가씨만이 자물쇠를 풀 수 있다」는 대사에 대한 응답입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">코바야시</div>
+                    <div class="dialogue-text">참고로 감시카메라는 모두 가짜 영상으로 교체되어 있었어요</div>
+                    <div class="note-text">이 코바야시 대사는 난이도가 높지만, 「참고로」라는 단어로부터 현장 검증에서 가볍게 끼워 넣는 말이라는 예상이 가능합니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">빅토리아</div>
+                    <div class="dialogue-text">그리고... 창문에도 자물쇠가 채워져 있어요</div>
+                    <div class="note-text">이것도 현장 검증에 관한 발언입니다. 「그리고...」라는 단어가 뒤쪽에 있다는 힌트입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">아케치</div>
+                    <div class="dialogue-text">침입 경로군요. 물론 처음에 확인했지만, 지문 하나 남아있지 않았어요</div>
+                    <div class="note-text">빅토리아의 「창문」이라는 단어와 관련성이 있는 「침입 경로」에 대해 말하는 아케치 대사가 정답입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">코바야시</div>
+                    <div class="dialogue-text">그런데 이 난로에서 연결된 굴뚝은 괜찮을까요?</div>
+                    <div class="note-text">현장 검증과 관련되면서도 장면 전환의 「그런데」라는 단어가 들어가는 코바야시 대사가 나옵니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">세바스</div>
+                    <div class="dialogue-text">난로에 불을 피워두었기 때문에 그쪽은 문제없습니다</div>
+                    <div class="note-text">코바야시의 「난로」를 언급하는 세바스 대사는 비교적 쉽게 답할 수 있을 것입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">아케치</div>
+                    <div class="dialogue-text">어라...? 문 아래쪽이 조금 젖어있네요...</div>
+                    <div class="note-text">난이도 높음. 「난로에 불」이라는 단어에서 「젖어있다」는 대비를 이끌어내는 것이 포인트입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">빅토리아</div>
+                    <div class="dialogue-text">그렇습니다와! 보세요, 얼음이 녹으면 문이 잠기는 트릭이에요!</div>
+                    <div class="note-text">앞의 아케치 대사에 대한 빅토리아의 대답입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">코바야시</div>
+                    <div class="dialogue-text">평범하게 문으로 나가기만 해도 자동으로 밀실이 완성되는군요!</div>
+                    <div class="note-text">빅토리아가 언급한 「얼음 트릭」에 대해 설명하는 코바야시 대사가 들어갑니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">세바스</div>
+                    <div class="dialogue-text">역시 대단하십니다, 아가씨! 이제...</div>
+                    <div class="note-text">마치 빅토리아가 아가씨인 것처럼 하는 세바스 대사가 들어갑니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">아케치</div>
+                    <div class="dialogue-text">모든 것이 해결되었습니다. 미션 컴플리트예요</div>
+                    <div class="note-text">마치 명탐정인 것처럼 하는 아케치 대사가 들어갑니다.</div>
+                </div>
+            </div>
+
+            <div class="game-info">
+                <h2 class="section-title">역순 해설</h2>
+                
+                <div class="dialogue-card">
+                    <div class="dialogue-number">아케치</div>
+                    <div class="dialogue-text">모든 것이 해결되었습니다. 미션 컴플리트예요</div>
+                    <div class="note-text">아케치가 금고 자물쇠를 훌륭하게 해결합니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">세바스</div>
+                    <div class="dialogue-text">역시 대단하십니다, 아가씨! 이제...</div>
+                    <div class="note-text">아케치 아가씨를 칭찬하는 세바스.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">코바야시</div>
+                    <div class="dialogue-text">평범하게 문으로 나가기만 해도 자동으로 밀실이 완성되는군요!</div>
+                    <div class="note-text">당연히 이미 트릭에 대해 알고 있는 코바야시.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">빅토리아</div>
+                    <div class="dialogue-text">그렇습니다와! 보세요, 얼음이 녹으면 문이 잠기는 트릭이에요!</div>
+                    <div class="note-text">빅토리아가 얼음 트릭을 열심히 만들었습니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">아케치</div>
+                    <div class="dialogue-text">어라...? 문 아래쪽이 조금 젖어있네요...</div>
+                    <div class="note-text">괴도 아케치는 절대 증거를 남기지 않습니다. 얼음 트릭으로 남는 흔적을 신경 씁니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">세바스</div>
+                    <div class="dialogue-text">난로에 불을 피워두었기 때문에 그쪽은 문제없습니다</div>
+                    <div class="note-text">세바스가 방에 있는 난로에 불을 피워두었습니다. 젖은 자국도 곧 마를 것입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">코바야시</div>
+                    <div class="dialogue-text">그런데 이 난로에서 연결된 굴뚝은 괜찮을까요?</div>
+                    <div class="note-text">난로에 불을 피운 것으로 괴도단의 침입 경로인 「굴뚝」 확인이 불가능해지지만, 증거가 남아있지 않은지 걱정하는 코바야시.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">아케치</div>
+                    <div class="dialogue-text">침입 경로군요. 물론 처음에 확인했지만, 지문 하나 남아있지 않았어요</div>
+                    <div class="note-text">하지만 아케치가 침입한 타이밍에 확실히 흔적은 지웠습니다. 역시 아가씨.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">빅토리아</div>
+                    <div class="dialogue-text">그리고... 창문에도 자물쇠가 채워져 있어요</div>
+                    <div class="note-text">현장을 밀실로 만들기 위해 빅토리아가 방을 확인하기 시작합니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">코바야시</div>
+                    <div class="dialogue-text">참고로 감시카메라는 모두 가짜 영상으로 교체되어 있었어요</div>
+                    <div class="note-text">감시카메라가 가짜 영상으로 바뀌어 있던 것도 코바야시가 보고합니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">빅토리아</div>
+                    <div class="dialogue-text">물론 아무에게도 들키지 않게 하고 있어요. 저택의 일류 경비원에게도 말이죠</div>
+                    <div class="note-text">감시카메라 영상을 바꾼 것은 빅토리아입니다. 자신만만한 빅토리아. 완전히 다이아를 도둑맞은 베테랑 경비원 마이클의 목이 날아갈 것입니다. 지저스.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">세바스</div>
+                    <div class="dialogue-text">역시 가장 놀라운 것은 금고겠지요. 이 복잡한 자물쇠를 풀 수 있는 건 아가씨뿐입니다</div>
+                    <div class="note-text">우쭐한 빅토리아는 제쳐두고, 세바스가 아케치 아가씨의 자물쇠 따기를 칭찬합니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">아케치</div>
+                    <div class="dialogue-text">후후, 저에게 맡겨주세요. 자, 다시 한 번 현장을 살펴보죠</div>
+                    <div class="note-text">집사의 칭찬에 응답하는 아케치 아가씨. 방심하지 않고 현장에 증거를 남기지 않았는지 한 번 더 확인합니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">세바스</div>
+                    <div class="dialogue-text">자물쇠로 잠긴 출입구와 열려진 금고...</div>
+                    <div class="note-text">방 안을 체크하는 세바스(※이후 얼음 트릭으로 자물쇠가 채워지는 전제로 대화하고 있습니다).</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">코바야시</div>
+                    <div class="dialogue-text">틀림없어요! 이 방 어디에도 흔적은 남아있지 않아요!</div>
+                    <div class="note-text">코바야시도 자신만만하게 흔적이 남아있지 않다고 보고합니다. 나쁜 놈입니다.</div>
+                </div>
+
+                <div class="dialogue-card">
+                    <div class="dialogue-number">빅토리아</div>
+                    <div class="dialogue-text">밀실에서 홀연히 사라진 다이아... 완전범죄네요――!</div>
+                    <div class="note-text">의기양양하게 빅토리아가 승리 선언. 너무 소란 피우면 들켜버려요.</div>
+                </div>
+            </div>
+
+            <div class="copyright">Thank you for playing! ©2025,ねくろに</div>
+            
+            <div class="button-container">
+                <button class="back-btn" onclick="showMainContent()">처음으로 돌아가기</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showCharacterSheet(character) {
+            // Hide all sections
+            document.getElementById('main-content').style.display = 'none';
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show selected character sheet
+            if (character === 'gamemaster') {
+                document.getElementById('gamemaster-sheet').classList.add('active');
+            } else {
+                document.getElementById(character + '-sheet').classList.add('active');
+            }
+        }
+        
+        function showMainContent() {
+            // Hide all sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show main content
+            document.getElementById('main-content').style.display = 'block';
+        }
+        
+        function showEnding() {
+            // Hide all sections
+            document.getElementById('main-content').style.display = 'none';
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Show ending
+            document.getElementById('ending-section').classList.add('active');
+        }
+        
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add floating animation to diamonds with random delays
+            const diamonds = document.querySelectorAll('.diamond');
+            diamonds.forEach((diamond, index) => {
+                diamond.style.animationDelay = (Math.random() * 5) + 's';
+            });
+        });
+    </script>
+</body>
+</html>
